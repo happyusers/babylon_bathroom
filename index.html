@@ -122,12 +122,11 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 					"textures/Grass_01.jpg"
 				];
 				
-								
-				//var textureObject;
+				
 
 				for (var i = 0; i < textures.length; i++) {
 					(function(texture) {
-						var textureObject = new BABYLON.Texture(texture, scene);
+						var textureObject = new BABYLON.Texture(texture, scene); //updated. creating textureObject inside function
 						var icon = document.createElement("img");
 						icon.src = textureObject.url;
 						icon.style.width = "50px";
@@ -147,14 +146,15 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 									selectedMesh.material.emissiveTexture = textureObject;
 								} else {
 									console.log(selectedMesh.name + " does not have a diffuse or emissive texture property");
-									//console.log("replacing material");
-									selectedMesh.material.refractionTexture = textureObject;
-									//selectedMesh.material = new BABYLON.StandardMaterial("material", scene);
-									selectedMesh.material.diffuseTexture = textureObject;
+									console.log("replacing material");
+									// selectedMesh.material = new BABYLON.StandardMaterial("material", scene);
+									selectedMesh.material.albedoTexture = textureObject; //updated
 								}	
 							}
 							popup.style.display = "none";
 						});
+						popup.appendChild(icon);
+					})(textures[i]);
 				}
 
 				// Set the material of the selected mesh to a new texture
