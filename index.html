@@ -21,7 +21,7 @@
         <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
         <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
 
-        <style> 
+        <style>
             html, body {
                 overflow: hidden;
                 width: 100%;
@@ -102,7 +102,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 				camera.beta = 1.9197;//0.01;
 
 				engine.hideLoadingUI();
-				//scene.debugLayer.show();
+				scene.debugLayer.show();
 
 				// Create a popup with texture icons
 				var popup = document.createElement("div");
@@ -122,6 +122,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 					"textures/Grass_01.jpg"
 				];
 				
+								
 				//var textureObject;
 
 				for (var i = 0; i < textures.length; i++) {
@@ -135,12 +136,25 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 						icon.addEventListener("click", function() {
 							if (selectedMesh.material) {
 								console.log(selectedMesh.name+" assign texture "+ textureObject.url);
-								selectedMesh.material.diffuseTexture = textureObject;
+								if (!selectedMesh.material) {
+									selectedMesh.material = new BABYLON.StandardMaterial("material", scene);
+								}
+								if (selectedMesh.material.diffuseTexture) {
+									console.log(selectedMesh.name + " assign texture " + textureObject.url);
+									selectedMesh.material.diffuseTexture = textureObject;
+								} else if (selectedMesh.material.emissiveTexture) {
+									console.log(selectedMesh.name + " assign texture " + textureObject.url);
+									selectedMesh.material.emissiveTexture = textureObject;
+								} else {
+									console.log(selectedMesh.name + " does not have a diffuse or emissive texture property");
+									//console.log("replacing material");
+									selectedMesh.material.refractionTexture = textureObject;
+									//selectedMesh.material = new BABYLON.StandardMaterial("material", scene);
+									selectedMesh.material.diffuseTexture = textureObject;
+								}	
 							}
 							popup.style.display = "none";
 						});
-						popup.appendChild(icon);
-					})(textures[i]);
 				}
 
 				// Set the material of the selected mesh to a new texture
